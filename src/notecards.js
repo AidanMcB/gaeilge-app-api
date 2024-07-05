@@ -2,13 +2,19 @@ require('dotenv').config();
 const utils = require('./utils');
 
 const Pool = require('pg').Pool
+// USE if local
+// const pool = new Pool({
+//     user: process.env.DB_USER,
+//     host: process.env.DB_HOST,
+//     database: process.env.DB_NAME,
+//     password: process.env.DB_PASSWORD,
+//     port: process.env.DB_PORT,
+// });
+
+// Use deployed
 const pool = new Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT,
-});
+    connectionString: process.env.GAEILGE_API_URL,
+})
 
 const getAllNotecards = (req, resp) => {
     pool.query('SELECT * FROM notecard ORDER BY id ASC', (error, results) => {
