@@ -13,7 +13,7 @@ if (process.env.GAEILGE_ENV === "local") {
     });
 } else {
     // Use deployed
-    new Pool({
+    pool = new Pool({
     	connectionString: process.env.GAEILGE_API_URL,
     });
 }
