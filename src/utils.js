@@ -6,7 +6,7 @@ const snakeToCamel = str =>
         .replace('_', '')
 );
 
-const regularizeDbObject = (obj) => {
+const normalizeFromDb = (obj) => {
     const newObj = {};
     Object.keys(obj).forEach((key) => {
         newObj[snakeToCamel(key)] = obj[key]
@@ -15,6 +15,6 @@ const regularizeDbObject = (obj) => {
 }
 
 module.exports = {
-    regularizeDbObject,
+    normalizeFromDb,
     snakeToCamel
 }
