@@ -1,18 +1,21 @@
 {
-  "name": "gaeilge-app-api",
-  "version": "1.0.0",
-  "description": "REST API for gaeilge app",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "test": "test"
-  },
-  "author": "Aidan McBride",
-  "license": "ISC",
-  "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "pg": "^8.11.5"
-  }
+    "name": "gaeilge-app-api",
+    "version": "1.0.0",
+    "description": "REST API for gaeilge app",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "test": "test"
+    },
+    "author": "Aidan McBride",
+    "license": "ISC",
+    "dependencies": {
+        "cookie-parser": "^1.4.7",
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.7",
+        "express": "^4.21.2",
+        "firebase": "^11.2.0",
+        "firebase-admin": "^13.0.2",
+        "pg": "^8.11.5"
+    }
 }
