@@ -1,1 +1,0 @@
-CREATE DATABASE [insert_db_name_here];
