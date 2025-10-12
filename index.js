@@ -8,17 +8,38 @@ const port = 3004;
 const app = express();
 
 const corsOptions = {
-    origin: [
-        process.env.FRONTEND_ORIGIN,
-        'https://gaeilge-app.vercel.app',
-        'https://cleachtadh-gaeilge-api.vercel.app'
-    ],
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        
+        const allowedOrigins = [
+            process.env.FRONTEND_ORIGIN,
+            'https://gaeilge-app.vercel.app',
+            'https://cleachtadh-gaeilge-api.vercel.app',
+            'http://localhost:5173',
+            'http://localhost:3000'
+        ];
+        
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            console.log('CORS blocked origin:', origin);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Guest-Mode']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Guest-Mode'],
+    optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
 app.use(cors(corsOptions));
+
+// Debug middleware
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.path} - Origin: ${req.headers.origin}`);
+    next();
+});
 
 // Middlware
 app.use(cookieParser());
@@ -69,6 +90,12 @@ app.get('/', (request, response) => {
     response.json({ info: 'Gaeilge v1. Node.js, Express, and Postgres API' });
 });
 
-app.listen(port, () => {
-    console.log(`App running on port ${port}.`);
-});
+// For Vercel serverless functions
+module.exports = app;
+
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(port, () => {
+        console.log(`App running on port ${port}.`);
+    });
+}
