@@ -18,6 +18,7 @@ END;
 $$ language 'plpgsql';
 
 -- Create trigger on users table
+DROP TRIGGER IF EXISTS set_updated_at ON users;
 CREATE TRIGGER set_updated_at
 BEFORE UPDATE ON users
 FOR EACH ROW

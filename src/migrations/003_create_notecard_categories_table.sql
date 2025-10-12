@@ -1,4 +1,4 @@
-CREATE TABLE notecard_categories (
+CREATE TABLE IF NOT EXISTS notecard_categories (
     notecard_id INTEGER NOT NULL,
     category_id INTEGER NOT NULL,
     PRIMARY KEY (notecard_id, category_id),

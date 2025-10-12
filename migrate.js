@@ -23,11 +23,23 @@ async function runMigrations() {
         await pool.query('SELECT NOW()');
         console.log('✅ Database connection successful');
         
-        // Read and execute setup script
-        const setupScript = fs.readFileSync(path.join(__dirname, 'setup-database.sql'), 'utf8');
-        console.log('📋 Executing setup-database.sql...');
-        await pool.query(setupScript);
-        console.log('✅ Setup script executed successfully');
+        // Check if tables already exist
+        const tableCheck = await pool.query(`
+            SELECT table_name 
+            FROM information_schema.tables 
+            WHERE table_schema = 'public' 
+            AND table_name IN ('users', 'notecards', 'categories', 'notecard_categories')
+        `);
+        
+        if (tableCheck.rows.length === 0) {
+            // Read and execute setup script only if no tables exist
+            const setupScript = fs.readFileSync(path.join(__dirname, 'setup-database.sql'), 'utf8');
+            console.log('📋 Executing setup-database.sql...');
+            await pool.query(setupScript);
+            console.log('✅ Setup script executed successfully');
+        } else {
+            console.log('📋 Tables already exist, skipping setup script');
+        }
         
         // Run individual migrations
         const migrationsDir = path.join(__dirname, 'src', 'migrations');
