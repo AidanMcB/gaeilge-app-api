@@ -1,6 +1,19 @@
 const { admin } = require('../config/firebase');
 
 const verifyToken = async (req, res, next) => {
+    // Check for guest mode header FIRST
+    const isGuestMode = req.headers['x-guest-mode'] === 'true';
+    
+    if (isGuestMode) {
+        // Create a mock user object for guest mode
+        req.user = {
+            uid: 'guest-user',
+            isGuest: true
+        };
+        return next();
+    }
+
+    // Only check for tokens if not in guest mode
     let idToken = req.cookies.access_token;
 
     // Optional fallback to Authorization header (dev/debug only)

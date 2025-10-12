@@ -11,7 +11,7 @@ const corsOptions = {
     origin: process.env.FRONTEND_ORIGIN,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Guest-Mode']
 };
 
 app.use(cors(corsOptions));
@@ -44,10 +44,10 @@ app.get('/users/:id', users.getUserById);
 
 // *** Notecards *** //
 app.get('/notecards', verifyToken, noteCards.getAllNoteCards);
-app.post('/notecards/create', noteCards.createNoteCard);
-app.delete('/notecards/:id', noteCards.deleteNoteCard);
-app.delete('/notecards/:noteCardId/categories/:categoryId', noteCards.removeCategoryFromNoteCard);
-app.put('/notecards/:id', noteCards.updateNoteCard);
+app.post('/notecards/create', verifyToken, noteCards.createNoteCard);
+app.delete('/notecards/:id', verifyToken, noteCards.deleteNoteCard);
+app.delete('/notecards/:noteCardId/categories/:categoryId', verifyToken, noteCards.removeCategoryFromNoteCard);
+app.put('/notecards/:id', verifyToken, noteCards.updateNoteCard);
 
 // *** Categories *** //
 app.get('/categories', categories.getAllCategories);
@@ -55,7 +55,7 @@ app.post('/categories/create', categories.createCategory);
 app.delete('/categories/:id', categories.deleteCategory);
 
 // *** Auth ***  //
-app.post('/auth/verify', verifyToken, firebaseAuthController.verifyAuth);
+app.post('/auth/verify', firebaseAuthController.verifyAuth);
 app.post('/auth/users/create', firebaseAuthController.createUser);
 app.post('/auth/users/login', firebaseAuthController.loginUser);
 app.get('/auth/users/me', verifyToken, firebaseAuthController.getCurrentUser);
