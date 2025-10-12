@@ -5,6 +5,7 @@
     "main": "index.js",
     "scripts": {
         "start": "node index.js",
+        "migrate": "node migrate.js",
         "test": "test"
     },
     "author": "Aidan McBride",
