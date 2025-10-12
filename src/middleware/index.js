@@ -1,4 +1,4 @@
-const { admin } = require('../config/firebase');
+const { admin } = require('../config/firebase.js');
 
 const verifyToken = async (req, res, next) => {
     // Check for guest mode header FIRST
