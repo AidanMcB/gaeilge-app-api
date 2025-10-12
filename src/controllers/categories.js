@@ -1,23 +1,5 @@
-require('dotenv').config();
-const utils = require('./utils');
-
-const Pool = require('pg').Pool;
-let pool;
-// Use if local
-if (process.env.GAEILGE_ENV === "local") {
-    pool = new Pool({
-        user: process.env.DB_USER,
-        host: process.env.DB_HOST,
-        database: process.env.DB_NAME,
-        password: process.env.DB_PASSWORD,
-        port: process.env.DB_PORT,
-    });
-} else {
-    // Use deployed
-    pool = new Pool({
-    	connectionString: process.env.GAEILGE_API_URL,
-    });
-}
+const utils = require('../utils');
+const pool = require('../config/db.js'); 
 
 const getAllCategories = (req, resp) => {
     pool.query('SELECT * FROM categories ORDER BY id ASC', (error, results) => {
