@@ -8,7 +8,12 @@ const port = 3004;
 const app = express();
 
 const corsOptions = {
-    origin: process.env.FRONTEND_ORIGIN,
+    origin: [
+        process.env.FRONTEND_ORIGIN,
+        'https://gaeilge-app.vercel.app',
+        'http://localhost:5173',
+        'http://localhost:3000'
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Guest-Mode']
