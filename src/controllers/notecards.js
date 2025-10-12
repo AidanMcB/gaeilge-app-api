@@ -11,12 +11,32 @@ const GUEST_USER = {
     updated_at: "2025-10-08T00:23:50.482Z"
 };
 
+// Helper function to ensure guest user exists and get their ID
+async function ensureGuestUserExists() {
+    let guestUserResult = await pool.query('SELECT id FROM users WHERE firebase_uid = $1', [GUEST_USER.firebase_uid]);
+    
+    if (guestUserResult.rows.length === 0) {
+        // Create guest user if it doesn't exist
+        const createGuestResult = await pool.query(
+            'INSERT INTO users (firebase_uid, username, email) VALUES ($1, $2, $3) RETURNING id',
+            [GUEST_USER.firebase_uid, GUEST_USER.username, GUEST_USER.email]
+        );
+        const userId = createGuestResult.rows[0].id;
+        console.log('Created guest user with ID:', userId);
+        return userId;
+    } else {
+        const userId = guestUserResult.rows[0].id;
+        console.log('Using existing guest user with ID:', userId);
+        return userId;
+    }
+}
+
 const getAllNoteCards = async (req, resp) => {
     try {
         // Handle guest mode
         if (req.user.isGuest) {
             // Use guest user ID for database queries
-            const userId = GUEST_USER.id;
+            const userId = await ensureGuestUserExists();
 
             const getNoteCardsResults = await pool.query(`
                 SELECT 
@@ -119,8 +139,8 @@ const createNoteCard = async (req, resp) => {
     try {
         // Handle guest mode
         if (req.user.isGuest) {
-            // Use guest user ID for database operations
-            const userId = GUEST_USER.id;
+            // Use guest user ID for database queries
+            const userId = await ensureGuestUserExists();
 
             // 1. Create new NoteCard with guest user_id
             const noteCardResult = await pool.query(
