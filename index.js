@@ -11,6 +11,7 @@ const corsOptions = {
     origin: [
         process.env.FRONTEND_ORIGIN,
         'https://gaeilge-app.vercel.app',
+        'https://cleachtadh-gaeilge-api.vercel.app'
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
