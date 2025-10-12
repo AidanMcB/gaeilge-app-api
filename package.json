@@ -8,7 +8,9 @@
         "migrate": "node migrate.js",
         "test": "test"
     },
-    "author": "Aidan McBride",
+    "engines": {
+        "node": ">=20.0.0"
+    },
     "license": "ISC",
     "dependencies": {
         "cookie-parser": "^1.4.7",
